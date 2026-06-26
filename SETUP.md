@@ -1,12 +1,12 @@
-# Agent Mesh — Setup Instructions
-> This file is read by Claude to set up Agent Mesh on a new machine.
+# Project Sanity — Setup Instructions
+> This file is read by Claude to set up Project Sanity on a new machine.
 > If you're a human reading this — just tell Claude to read it and Claude will handle the rest.
 
 ---
 
 ## What You Are Doing
 
-You are setting up Agent Mesh — a session continuity and multi-agent coordination system for Claude.
+You are setting up Project Sanity — a session continuity and multi-agent coordination system for Claude.
 
 When complete, the user will have:
 - A knowledge folder with PROJECTS.md, ROSTER.md, and handoff-instructions.md
@@ -106,7 +106,7 @@ For each agent set up in Step 5, create:
 
 Tell the user:
 
-> "Agent Mesh is set up. Here's what was created:"
+> "Project Sanity is set up. Here's what was created:"
 
 List everything that was created with full paths.
 

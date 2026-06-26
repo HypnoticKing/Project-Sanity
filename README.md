@@ -1,4 +1,4 @@
-# Agent Mesh
+# Project Sanity
 ### A session continuity and multi-agent coordination system for Claude
 
 ---
@@ -7,7 +7,7 @@ Most people re-explain their projects every time they open a new Claude session.
 
 This system fixes that.
 
-Agent Mesh is a lightweight framework that gives every Claude agent you build shared access to a live knowledge base — your projects, your roster, your decisions — so nothing gets lost between sessions and every agent starts informed.
+Project Sanity is a lightweight, agent mesh framework, that gives every Claude agent you build shared access to a live knowledge base - your projects, your roster, your decisions - so nothing gets lost between sessions and every agent starts informed.
 
 Built and battle-tested over 18+ months of daily production use across a portfolio of AI products and automation systems.
 
@@ -29,13 +29,13 @@ That's friction. It compounds. It slows everything down.
 
 ## The Solution: A Shared Knowledge Layer
 
-Agent Mesh gives every agent three files to read at session start:
+Project Sanity gives every agent three files to read at session start:
 
 | File | What It Does |
 |------|-------------|
-| `PROJECTS.md` | Live portfolio — every project, its status, stack, and constraints |
-| `ROSTER.md` | Agent hierarchy — who does what, when to route where |
-| `handoff-instructions.md` | Session protocol — how to write handoffs, memory, and ideas |
+| `PROJECTS.md` | Live portfolio - every project, its status, stack, and constraints |
+| `ROSTER.md` | Agent hierarchy - who does what, when to route where |
+| `handoff-instructions.md` | Session protocol - how to write handoffs, memory, and ideas |
 
 No project details hardcoded in agent instructions. No roster details to update in ten places. One file changes, every agent is current next session.
 
@@ -55,7 +55,7 @@ handoffs/
     └── ideas/       <- half-baked ideas captured mid-session for future harvest
 ```
 
-Next session opens with the awakening prompt — a copy-paste ready brief that tells the agent exactly where you left off, what's done, and what's next. No re-explaining. No lost context.
+Next session opens with the awakening prompt - a copy-paste ready brief that tells the agent exactly where you left off, what's done, and what's next. No re-explaining. No lost context.
 
 The ideas folder is the sleeper feature. Every half-formed thought that surfaces mid-session gets captured instead of lost. Run a harvest pass later and something clicks.
 
@@ -102,7 +102,7 @@ git clone https://github.com/HypnoticKing/Project-Sanity.git
 Open a new Claude chat with filesystem access (Claude Desktop or Claude Code). Then paste this:
 
 ```
-Read the SETUP.md file at [path to where you cloned the repo] and set up Agent Mesh on my machine.
+Read the SETUP.md file at [path to where you cloned the repo] and set up Project Sanity on my machine.
 ```
 
 Claude will:
@@ -120,8 +120,8 @@ That's it. First session starts informed.
 **1. Choose your paths**
 
 Pick two folders on your machine:
-- `KNOWLEDGE_ROOT` — where your knowledge files live (PROJECTS.md, ROSTER.md, agent files)
-- `HANDOFFS_ROOT` — where session handoffs are saved
+- `KNOWLEDGE_ROOT` - where your knowledge files live (PROJECTS.md, ROSTER.md, agent files)
+- `HANDOFFS_ROOT` - where session handoffs are saved
 
 **2. Copy the knowledge files**
 
@@ -134,7 +134,7 @@ Open `ROSTER.md` and define your agents.
 
 **4. Create your first agent**
 
-Copy `agents/HUSTLE/agent.md` as a starting point. Replace the role, tone, and capabilities with your own. Keep the session start protocol — that's what connects the agent to the mesh.
+Copy `agents/HUSTLE/agent.md` as a starting point. Replace the role, tone, and capabilities with your own. Keep the session start protocol - that's what connects the agent to the mesh.
 
 **5. Create handoff folders**
 
@@ -157,7 +157,7 @@ Next session, paste the awakening prompt. You're back in context in seconds.
 
 ## The Agent Architecture
 
-Agent Mesh works best with a clear hierarchy. The included agents show two patterns:
+Project Sanity works best with a clear hierarchy. The included agents show two patterns:
 
 **HUSTLE** — a conversational Claude Projects agent. Lives in the chat window. Handles strategy, momentum, and decisions. Cannot touch files directly. Routes technical work elsewhere.
 
@@ -195,7 +195,7 @@ The fix: after any significant agent pass, review output against your original i
 
 ## Contributing
 
-This is a living system. If you build agents, improve the handoff format, or find better patterns — PRs are welcome.
+This is a living system. If you build agents, improve the handoff format, or find better patterns - PRs are welcome.
 
 ---
 
