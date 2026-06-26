@@ -59,6 +59,8 @@ Next session opens with the awakening prompt — a copy-paste ready brief that t
 
 The ideas folder is the sleeper feature. Every half-formed thought that surfaces mid-session gets captured instead of lost. Run a harvest pass later and something clicks.
 
+**Nothing is siloed.** Any agent can read any other agent's sessions, memory, or ideas folders. Point an agent at any handoff file to pull context across the mesh.
+
 ---
 
 ## What's In This Repo
@@ -66,69 +68,88 @@ The ideas folder is the sleeper feature. Every half-formed thought that surfaces
 ```
 agent-mesh/
 ├── README.md
+├── SETUP.md                         <- Claude reads this and sets up your machine
 ├── knowledge/
-│   ├── PROJECTS.md              <- template: your live project portfolio
-│   ├── ROSTER.md                <- template: your agent hierarchy
-│   └── handoff-instructions.md  <- the full session protocol spec
+│   ├── PROJECTS.md                  <- template: your live project portfolio
+│   ├── ROSTER.md                    <- template: your agent hierarchy
+│   └── handoff-instructions.md      <- the full session protocol spec
 ├── agents/
 │   ├── HUSTLE/
-│   │   └── agent.md             <- example: business partner + momentum agent
+│   │   └── agent.md                 <- example: business partner + momentum agent
 │   └── SCOUT/
-│       └── agent.md             <- example: repo triage and destiny engine
+│       └── agent.md                 <- example: repo triage and destiny engine
 ├── handoffs/
 │   └── AGENT_NAME/
 │       ├── sessions/
 │       ├── memory/
 │       └── ideas/
 └── examples/
-    ├── example-handoff.json     <- real handoff, fictional project
-    └── example-project-brief.md <- how to write a project brief agents can read
+    ├── example-handoff.json         <- real handoff, fictional project
+    └── example-project-brief.md     <- how to write a project brief agents can read
 ```
 
 ---
 
-## Getting Started
+## Installation — Let Claude Do It
 
 **1. Clone the repo**
 ```bash
-git clone https://github.com/yourusername/agent-mesh.git
+git clone https://github.com/HypnoticKing/Project-Sanity.git
 ```
 
-**2. Fill in the knowledge layer**
+**2. Tell Claude to set it up**
 
-Open `knowledge/PROJECTS.md` and add your active projects.
-Open `knowledge/ROSTER.md` and define your agents.
-
-These two files are your source of truth. Every agent reads them. Never hardcode this information in an agent's instructions.
-
-**3. Create your first agent**
-
-Copy `agents/HUSTLE/agent.md` as a starting point. Replace the role, tone, and capabilities with your own. Keep the session start protocol -- that's what connects the agent to the mesh.
-
-Every agent instructions file should include:
+Open a new Claude chat with filesystem access (Claude Desktop or Claude Code). Then paste this:
 
 ```
-## Session Start Protocol
-Read these files before doing anything else:
-1. [KNOWLEDGE_ROOT]\knowledge\PROJECTS.md
-2. [KNOWLEDGE_ROOT]\knowledge\ROSTER.md
-3. Latest handoff from [HANDOFFS_ROOT]\[AGENT_NAME]\sessions\
+Read the SETUP.md file at [path to where you cloned the repo] and set up Agent Mesh on my machine.
 ```
 
-**4. Create your handoff folder**
+Claude will:
+- Ask where you want your knowledge folder and handoff folder to live
+- Replace all placeholders with your actual paths
+- Create your folder structure
+- Walk you through filling in your first PROJECTS.md and ROSTER.md
+
+That's it. First session starts informed.
+
+---
+
+## Manual Setup (if you prefer)
+
+**1. Choose your paths**
+
+Pick two folders on your machine:
+- `KNOWLEDGE_ROOT` — where your knowledge files live (PROJECTS.md, ROSTER.md, agent files)
+- `HANDOFFS_ROOT` — where session handoffs are saved
+
+**2. Copy the knowledge files**
+
+Copy everything from `knowledge/` into your `KNOWLEDGE_ROOT` folder.
+
+**3. Fill in your projects and roster**
+
+Open `PROJECTS.md` and add your active projects.
+Open `ROSTER.md` and define your agents.
+
+**4. Create your first agent**
+
+Copy `agents/HUSTLE/agent.md` as a starting point. Replace the role, tone, and capabilities with your own. Keep the session start protocol — that's what connects the agent to the mesh.
+
+**5. Create handoff folders**
 
 For each agent, create:
 ```
-handoffs/
+[HANDOFFS_ROOT]/
 └── YOUR_AGENT_NAME/
     ├── sessions/
     ├── memory/
     └── ideas/
 ```
 
-**5. Run your first session**
+**6. Run your first session**
 
-Paste your agent's `agent.md` into a Claude Project as the system prompt. Start the session. At the end, ask Claude to write the handoff JSON and save it to `sessions/`.
+Paste your agent's `agent.md` into a Claude Project as the system prompt. At the end of the session, ask Claude to write the handoff JSON and save it to `sessions/`.
 
 Next session, paste the awakening prompt. You're back in context in seconds.
 
@@ -154,15 +175,17 @@ You can build as many agents as your workflow needs. The mesh keeps them coordin
 
 **Momentum over perfection.** A shipped thing beats a perfect plan. The handoff system exists so you can stop mid-session and pick up tomorrow without losing an hour re-establishing context.
 
-**Ideas are first-class output.** Half-formed ideas that surface mid-session are worth capturing. The ideas folder makes that effortless. A future harvest pass across all agent idea folders is where unexpected connections happen.
+**Ideas are first-class output.** Half-formed ideas that surface mid-session are worth capturing. The ideas folder makes that effortless. A harvest pass across all agent idea folders is where unexpected connections happen.
 
-**The awakening prompt is the secret.** A well-written awakening prompt means every session starts at full speed. It is not a summary -- it is a launch pad.
+**The awakening prompt is the secret.** A well-written awakening prompt means every session starts at full speed. It is not a summary — it is a launch pad.
+
+**The mesh is open.** Every agent can read every other agent's handoffs, memory, and ideas. Context flows freely. Nothing is locked away.
 
 ---
 
 ## A Note on Agent Logic Drift
 
-If you use AI coding agents to build or modify your projects, validate that their output aligns with your intent -- not just that it runs.
+If you use AI coding agents to build or modify your projects, validate that their output aligns with your intent — not just that it runs.
 
 AI agents can silently rewrite logic in ways that contradict your product's philosophy. The changes will look correct. The code will work. But the behavior will be wrong.
 
@@ -170,27 +193,9 @@ The fix: after any significant agent pass, review output against your original i
 
 ---
 
-## Customizing for Your Workflow
-
-Replace `[KNOWLEDGE_ROOT]` and `[HANDOFFS_ROOT]` throughout with your actual paths.
-
-Windows example:
-```
-[KNOWLEDGE_ROOT] = C:\Users\yourname\.claude\
-[HANDOFFS_ROOT]  = C:\Handoffs\
-```
-
-Mac/Linux example:
-```
-[KNOWLEDGE_ROOT] = ~/.claude/
-[HANDOFFS_ROOT]  = ~/handoffs/
-```
-
----
-
 ## Contributing
 
-This is a living system. If you build agents, improve the handoff format, or find better patterns -- PRs are welcome.
+This is a living system. If you build agents, improve the handoff format, or find better patterns — PRs are welcome.
 
 ---
 

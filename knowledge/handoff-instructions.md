@@ -15,31 +15,27 @@ A handoff JSON is written at the end of every session so the next context window
 
 ## Session Start Protocol
 
-Every agent reads these three files at the start of every session, before doing anything else:
+Every agent reads these files at the start of every session, before doing anything else:
 
 1. `[KNOWLEDGE_ROOT]\knowledge\PROJECTS.md` — current project portfolio and status
 2. `[KNOWLEDGE_ROOT]\knowledge\ROSTER.md` — active agents, roles, and routing
-3. Latest handoff JSON from the agent's own handoff folder
+3. Latest handoff JSON from the agent's own `sessions\` folder
 
 This is how the agent mesh stays current. No project or roster details are hardcoded in agent instructions — the live files are always the source of truth.
 
+**Cross-agent context**: Any agent's `sessions\`, `memory\`, or `ideas\` folders can be read by any other agent when relevant. The full handoff structure lives at `[HANDOFFS_ROOT]\` — point any agent at any file to pull context across the mesh. Nothing is siloed. Everything is accessible.
+
 ---
 
-## Handoff Folder Routing
+## Handoff Folder Structure
 
-Every agent saves its handoff to a folder named after itself:
-
-```
-[HANDOFFS_ROOT]\[AGENT_NAME]\sessions\
-```
-
-Each agent folder contains three subfolders:
+Every agent gets a folder named after itself with three subfolders:
 
 ```
 [HANDOFFS_ROOT]\[AGENT_NAME]\
-    sessions\   — handoff JSON files from every session
-    memory\     — long-term notes the agent should carry forward
-    ideas\      — ideas captured mid-session for future harvest
+    sessions\   <- handoff JSON files from every session
+    memory\     <- long-term notes worth carrying forward permanently
+    ideas\      <- ideas captured mid-session for future harvest
 ```
 
 When a new agent is created, create a matching folder with all three subfolders. No routing table to maintain — the pattern is the rule.
