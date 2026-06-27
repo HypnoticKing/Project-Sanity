@@ -19,6 +19,14 @@
     "Screenshot after each change before moving to next item"
   ],
 
+  "deferred": [
+    "Mobile responsiveness audit -- not blocking launch, scheduled for post-ship"
+  ],
+
+  "open_questions": [
+    "User asked about adding an export feature -- no decision made, needs to confirm if it's in scope for v1"
+  ],
+
   "working_directory": "[PROJECT_ROOT]\\my-saas-app\\",
 
   "technical_context": {
@@ -28,13 +36,20 @@
     "next_step": "Open Settings page in browser, compare against design reference, list gaps"
   },
 
-  "system_state": {
-    "running_locally": ["dev server on localhost:5173"],
-    "open_files": [],
+  "running_state": {
+    "processes": [
+      "Vite dev server -- localhost:5173 -- kill: Ctrl+C in terminal"
+    ],
+    "open_branches": "main",
+    "open_worktrees": "none",
     "git_status": "clean",
-    "environment": "local",
-    "relevant_terminals": "Vite dev server running"
+    "environment": "local"
   },
+
+  "verification": [
+    "npm run dev -- dev server starts on localhost:5173 with no errors",
+    "Open localhost:5173/dashboard in browser -- renders without console errors"
+  ],
 
   "business_context": {
     "revenue_potential": "App is gated behind paywall -- launch unlocks first paid tier revenue",

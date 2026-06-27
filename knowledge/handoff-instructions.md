@@ -1,6 +1,6 @@
 # Handoff Instructions
 **Canonical**: [KNOWLEDGE_ROOT]\knowledge\handoff-instructions.md
-**Last Updated**: 2026-06-26
+**Last Updated**: 2026-06-27
 
 > This file tells every agent how to write a session handoff and where to save it.
 > Read this at the end of every session before writing the handoff JSON.
@@ -91,7 +91,15 @@ Every handoff must include these fields:
     "Second thing if applicable"
   ],
 
-  "working_directory": "Path to active project files",
+  "deferred": [
+    "Item pushed out of this session scope — reason why"
+  ],
+
+  "open_questions": [
+    "Question that needs the user's input — context on why it's blocking"
+  ],
+
+  "working_directory": "Absolute path to active project files",
 
   "technical_context": {
     "platform": "Claude Projects / Claude Code / Both",
@@ -100,13 +108,20 @@ Every handoff must include these fields:
     "next_step": "Specific next action"
   },
 
-  "system_state": {
-    "running_locally": [],
-    "open_files": [],
-    "git_status": "clean / dirty / N/A",
-    "environment": "local",
-    "relevant_terminals": "Any active processes"
+  "running_state": {
+    "processes": [
+      "dev server -- localhost:5173 -- kill: Ctrl+C in terminal / or 'none'"
+    ],
+    "open_branches": "branch name or 'none'",
+    "open_worktrees": "path or 'none'",
+    "git_status": "clean / dirty / uncommitted changes in [file]",
+    "environment": "local / remote / both"
   },
+
+  "verification": [
+    "command or action -- expected outcome",
+    "npm run dev -- dev server starts on localhost:5173 with no errors"
+  ],
 
   "business_context": {
     "revenue_potential": "Why this matters commercially",
@@ -135,7 +150,7 @@ Every handoff must include these fields:
   "session_friction": [],
 
   "assets_ready": [
-    "List of files created or modified this session with full paths"
+    "Absolute path to file -- what it is / status"
   ],
 
   "ecosystem_changes": [
@@ -149,6 +164,18 @@ Every handoff must include these fields:
   "awakening_prompt": "Copy-paste ready prompt for the next session opening. Should include: what we were doing, what is done, what is next, and ask the user to confirm priority before proceeding."
 }
 ```
+
+---
+
+## Field Notes
+
+**`deferred` vs `open_questions`**: Deferred items are work pushed out by choice — scope, time, or priority. Open questions need the user's input before the next agent can move. Keep them separate. Don't bury either inside `immediate_next`.
+
+**`running_state.processes`**: List every active process with its port and how to kill it. If nothing is running, write `"none"`. Never omit this field — the next agent cannot discover running processes on its own.
+
+**`verification`**: One or two commands the next agent can run to confirm the environment is still healthy before touching anything. If there's nothing to verify (pure strategy session, no code), write `"none"`.
+
+**`assets_ready`**: Absolute paths only. Relative paths break when the next agent has a different working directory.
 
 ---
 
