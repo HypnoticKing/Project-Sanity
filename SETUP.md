@@ -114,6 +114,10 @@ Then tell them:
 
 > "To start your first session, paste the contents of [KNOWLEDGE_ROOT]\agents\HUSTLE\agent.md into a Claude Project as the system prompt. At the end of your session, ask Claude to write the handoff JSON to [HANDOFFS_ROOT]\HUSTLE\sessions\. Your next session will open with the awakening prompt and pick up exactly where you left off."
 
+Then tell them one more thing:
+
+> "Important: agents do not write handoffs automatically. You have to ask. On long sessions, don't wait until you're done — ask for a handoff before you step away, or mid-session if the conversation has been running deep. The context window has a limit, and once it's full, context is gone. A quick 'write the handoff' before you close the window is the habit that makes this whole system work."
+
 ---
 
 ## Notes for Claude

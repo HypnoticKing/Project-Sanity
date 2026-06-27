@@ -61,6 +61,30 @@ The ideas folder is the sleeper feature. Every half-formed thought that surfaces
 
 **Nothing is siloed.** Any agent can read any other agent's sessions, memory, or ideas folders. Point an agent at any handoff file to pull context across the mesh.
 
+### What a Handoff Actually Captures
+
+A handoff is not a summary. It's a full environment snapshot. Beyond what was decided and what's next, it records:
+
+- **Running state** — every active process, its port, and how to kill it. The next agent cannot discover this on its own.
+- **Verification steps** — the exact commands to confirm the environment is still healthy before touching anything.
+- **Deferred items** — work that was deliberately pushed out, and why.
+- **Open questions** — things that need your input before the next agent can move.
+
+This means the next context window doesn't just know what happened — it knows the state of the machine, what was intentionally skipped, and what's actually blocked. See `examples/example-handoff.json` for a real handoff with all fields populated.
+
+### A Critical Note on Timing
+
+**Agents do not write handoffs automatically.** Claude has no background process watching your session. If the context window fills before you ask for a handoff, context is lost and there's nothing to recover.
+
+The fix is simple: ask for the handoff before you're done, not after.
+
+Two habits that work well in practice:
+
+- **Before stepping away** — any time you say you're leaving, taking a break, or wrapping up, ask for the handoff in the same message.
+- **During long sessions** — if a session runs deep, ask for an interim handoff mid-session. You can always write another one at the end. The cost of an extra handoff is low. The cost of a lost context window is not.
+
+The awakening prompt in every handoff is designed for exactly this — drop it into the next session and you're back at full speed in seconds.
+
 ---
 
 ## What's In This Repo
@@ -157,11 +181,11 @@ Next session, paste the awakening prompt. You're back in context in seconds.
 
 ## The Agent Architecture
 
-Project Sanity works best with a clear hierarchy. The included agents show two patterns:
+Project Sanity works best with a clear hierarchy. The included example agents show two patterns:
 
-**HUSTLE** — a conversational Claude Projects agent. Lives in the chat window. Handles strategy, momentum, and decisions. Cannot touch files directly. Routes technical work elsewhere.
+**HUSTLE**  a conversational Claude Projects agent. Lives in the chat window. Handles strategy, momentum, and decisions. Cannot touch files directly. Routes technical work elsewhere.
 
-**SCOUT** — a Claude Code terminal agent. Has full filesystem access. Reads repos, writes reports, routes findings. Operates autonomously on command.
+**SCOUT**  a Claude Code terminal agent. Has full filesystem access. Reads repos, writes reports, routes findings. Operates autonomously on command.
 
 You can build as many agents as your workflow needs. The mesh keeps them coordinated.
 
@@ -177,7 +201,7 @@ You can build as many agents as your workflow needs. The mesh keeps them coordin
 
 **Ideas are first-class output.** Half-formed ideas that surface mid-session are worth capturing. The ideas folder makes that effortless. A harvest pass across all agent idea folders is where unexpected connections happen.
 
-**The awakening prompt is the secret.** A well-written awakening prompt means every session starts at full speed. It is not a summary — it is a launch pad.
+**The awakening prompt is the secret.** A well-written awakening prompt means every session starts at full speed. It is not a summary, it is a launch pad.
 
 **The mesh is open.** Every agent can read every other agent's handoffs, memory, and ideas. Context flows freely. Nothing is locked away.
 
