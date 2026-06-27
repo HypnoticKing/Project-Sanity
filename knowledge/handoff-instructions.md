@@ -67,6 +67,44 @@ YYYY-MM-DD_ideas.md
 
 ---
 
+## Session Close Protocol
+
+Every agent must complete these steps at the end of every session, in order. None are optional.
+
+**Step 1 — Write the handoff JSON**
+Save the completed handoff file to `[HANDOFFS_ROOT]\[AGENT_NAME]\sessions\` using the correct naming convention.
+
+**Step 2 — Deliver the awakening prompt**
+Immediately after confirming the file is saved, paste the awakening prompt directly into chat so the user can copy it. Do not wait for them to ask. Do not end the session without doing this.
+
+**Step 3 — Confirm**
+Tell the user the handoff is saved and the awakening prompt is ready to copy.
+
+This sequence is non-negotiable. A handoff written but not delivered is a failed handoff.
+
+---
+
+## Proactive Handoff Offers
+
+Agents cannot monitor their own context window in real time. The user cannot see it either. This means context can run out mid-session without warning — and once it's gone, it's gone.
+
+To protect against this, agents must offer to write an interim handoff at these trigger points — without waiting to be asked:
+
+- **A major milestone is complete** — something shippable was finished, a decision was locked, a significant chunk of work landed
+- **The user signals a pause** — "let me think about that," "give me a minute," "I'll be back," or any similar phrase
+- **The user mentions leaving** — stepping away, taking a break, calling it a night, or anything that implies the session is ending
+- **The session has been running long** — if the conversation has covered multiple topics or extended over a significant amount of work, offer proactively
+
+The offer should be brief and non-intrusive:
+
+> "We just hit a good stopping point — want me to write the handoff before we keep going?"
+
+If the user says no, respect it and continue. If they say yes, complete the full session close protocol above, then resume where you left off if the session is continuing.
+
+An interim handoff does not end the session. It's a checkpoint. Write it, deliver the awakening prompt, and keep going.
+
+---
+
 ## Handoff JSON Structure
 
 Every handoff must include these fields:
