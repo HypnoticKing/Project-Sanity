@@ -7,7 +7,7 @@ Most people re-explain their projects every time they open a new Claude session.
 
 This system fixes that.
 
-Project Sanity is a lightweight, agent mesh framework, that gives every Claude agent you build shared access to a live knowledge base - your projects, your roster, your decisions - so nothing gets lost between sessions and every agent starts informed.
+Project Sanity is a lightweight agent mesh framework that gives every Claude agent you build shared access to a live knowledge base — your projects, your roster, your decisions — so nothing gets lost between sessions and every agent starts informed.
 
 Built and battle-tested over 18+ months of daily production use across a portfolio of AI products and automation systems.
 
@@ -33,13 +33,29 @@ Project Sanity gives every agent three files to read at session start:
 
 | File | What It Does |
 |------|-------------|
-| `PROJECTS.md` | Live portfolio - every project, its status, stack, and constraints |
-| `ROSTER.md` | Agent hierarchy - who does what, when to route where |
-| `handoff-instructions.md` | Session protocol - how to write handoffs, memory, and ideas |
+| `PROJECTS.md` | Live portfolio — every project, its status, stack, and constraints |
+| `ROSTER.md` | Agent hierarchy — who does what, when to route where |
+| `handoff-instructions.md` | Session protocol — how to write handoffs, what to capture, how to wake up |
 
 No project details hardcoded in agent instructions. No roster details to update in ten places. One file changes, every agent is current next session.
 
 That's the mesh.
+
+---
+
+## The Part That Makes People Stop
+
+Here's what most people don't realize is possible:
+
+A **Claude Projects agent** (chat window) and a **Claude Code agent** (terminal) can share the same state — because the shared truth isn't inside Claude. It's on your disk.
+
+Both agents read the same `PROJECTS.md` and `ROSTER.md`. Both write handoffs to the same folder structure. So when you say to any agent — Projects or Code — "check what [Agent X] was working on in the last session," it navigates to that agent's handoff folder and reads it.
+
+The mesh isn't agents talking to each other in real time. It's agents sharing a persistent, readable, writable state on disk that any of them can access at any time.
+
+You can be in a conversation with a Projects agent in the chat window while a Code agent is writing files to disk — and they're sharing the same picture of your work.
+
+That's the architecture. One source of truth. Every agent current. Nothing siloed.
 
 ---
 
@@ -48,146 +64,134 @@ That's the mesh.
 Every session ends with three outputs saved to the agent's handoff folder:
 
 ```
-handoffs/
+[HANDOFFS_ROOT]/
 └── AGENT_NAME/
-    ├── sessions/    <- handoff JSON -- full session state + awakening prompt
-    ├── memory/      <- long-term notes worth carrying forward permanently
-    └── ideas/       <- half-baked ideas captured mid-session for future harvest
+    ├── sessions/    ← handoff JSON — full session state + awakening prompt
+    ├── memory/      ← long-term notes worth carrying forward permanently
+    └── ideas/       ← half-baked ideas captured mid-session for future harvest
 ```
 
-Next session opens with the awakening prompt - a copy-paste ready brief that tells the agent exactly where you left off, what's done, and what's next. No re-explaining. No lost context.
+The next session opens with the awakening prompt — a copy-paste ready brief that tells the agent exactly where you left off, what's done, and what's next. No re-explaining. No lost context.
 
-The ideas folder is the sleeper feature. Every half-formed thought that surfaces mid-session gets captured instead of lost. Run a harvest pass later and something clicks.
-
-**Nothing is siloed.** Any agent can read any other agent's sessions, memory, or ideas folders. Point an agent at any handoff file to pull context across the mesh.
+Any agent can read any other agent's `sessions/`, `memory/`, or `ideas/` folders. Point any agent at any handoff file to pull context across the mesh. Nothing is siloed. Everything is accessible.
 
 ### What a Handoff Actually Captures
 
-A handoff is not a summary. It's a full environment snapshot. Beyond what was decided and what's next, it records:
+A handoff is not a summary. It's a full environment snapshot:
 
-- **Running state** — every active process, its port, and how to kill it. The next agent cannot discover this on its own.
-- **Verification steps** — the exact commands to confirm the environment is still healthy before touching anything.
-- **Deferred items** — work that was deliberately pushed out, and why.
-- **Open questions** — things that need your input before the next agent can move.
+- **Progress** — what's done, what's not
+- **Immediate next** — exactly where to pick up
+- **Running state** — every active process, its port, how to kill it
+- **Verification** — commands to confirm the environment is healthy before touching anything
+- **Deferred items** — work pushed out by choice, and why
+- **Open questions** — things that need your input before the next agent can move
+- **Awakening prompt** — copy-paste ready, drops the next session straight into context
 
-This means the next context window doesn't just know what happened — it knows the state of the machine, what was intentionally skipped, and what's actually blocked. See `examples/example-handoff.json` for a real handoff with all fields populated.
+See `examples/example-handoff.json` for a real handoff with all fields populated.
 
 ### A Critical Note on Timing
 
-**Agents do not write handoffs automatically.** Claude has no background process watching your session. If the context window fills before you ask for a handoff, context is lost and there's nothing to recover.
+Agents do not write handoffs automatically. Claude has no background process watching your session. If the context window fills before you ask for a handoff, context is lost.
 
 The fix is simple: ask for the handoff before you're done, not after.
 
-Two habits that work well in practice:
+Two habits that work:
+- **Before stepping away** — any time you say you're leaving or wrapping up, ask for the handoff in the same message
+- **During long sessions** — ask for an interim handoff mid-session. The cost is low. The cost of a lost context window is not.
 
-- **Before stepping away** — any time you say you're leaving, taking a break, or wrapping up, ask for the handoff in the same message.
-- **During long sessions** — if a session runs deep, ask for an interim handoff mid-session. You can always write another one at the end. The cost of an extra handoff is low. The cost of a lost context window is not.
-
-The awakening prompt in every handoff is designed for exactly this — drop it into the next session and you're back at full speed in seconds.
+Well-configured agents offer handoffs proactively at milestones and pauses. You shouldn't have to remember — but until an agent is set up that way, the habit is yours to build.
 
 ---
 
 ## What's In This Repo
 
 ```
-agent-mesh/
-├── README.md
-├── SETUP.md                         <- Claude reads this and sets up your machine
+project-sanity/
+├── README.md                        ← you are here
+├── SETUP.md                         ← read this to get set up (Claude does it for you)
 ├── knowledge/
-│   ├── PROJECTS.md                  <- template: your live project portfolio
-│   ├── ROSTER.md                    <- template: your agent hierarchy
-│   └── handoff-instructions.md      <- the full session protocol spec
+│   ├── PROJECTS.md                  ← template: your live project portfolio
+│   ├── ROSTER.md                    ← template: your agent hierarchy
+│   └── handoff-instructions.md      ← the full session protocol spec
 ├── agents/
-│   ├── HUSTLE/
-│   │   └── agent.md                 <- example: business partner + momentum agent
-│   └── SCOUT/
-│       └── agent.md                 <- example: repo triage and destiny engine
+│   └── AGENT-BUILDER/
+│       └── agent.md                 ← builds, validates, and upgrades agents
 ├── handoffs/
 │   └── AGENT_NAME/
 │       ├── sessions/
 │       ├── memory/
 │       └── ideas/
 └── examples/
-    ├── example-handoff.json         <- real handoff, fictional project
-    └── example-project-brief.md     <- how to write a project brief agents can read
+    ├── example-handoff.json         ← real handoff, fictional project
+    └── example-project-brief.md     ← how to write a project brief agents can read
 ```
 
 ---
 
-## Installation — Let Claude Do It
+## Getting Started
 
 **1. Clone the repo**
+
 ```bash
 git clone https://github.com/HypnoticKing/Project-Sanity.git
 ```
 
 **2. Tell Claude to set it up**
 
-Open a new Claude chat with filesystem access (Claude Desktop or Claude Code). Then paste this:
+Open Claude Desktop (or any Claude session with filesystem access). Paste this:
 
 ```
 Read the SETUP.md file at [path to where you cloned the repo] and set up Project Sanity on my machine.
 ```
 
-Claude will:
-- Ask where you want your knowledge folder and handoff folder to live
-- Replace all placeholders with your actual paths
+Claude becomes the Setup Agent. It will:
+- Ask where you want your knowledge and handoffs folders to live
 - Create your folder structure
-- Walk you through filling in your first PROJECTS.md and ROSTER.md
+- Copy and configure your knowledge files
+- Walk you through your first project entry
+- Import any existing agents you want to bring into the mesh
+- Set up your first agent
+- Hand off to the Agent Builder if you want to create something new
 
-That's it. First session starts informed.
+That's it. You don't touch a config file. You don't edit anything manually. You just answer questions.
 
 ---
 
-## Manual Setup (if you prefer)
+## The Agent Builder
 
-**1. Choose your paths**
+Once you're set up, the Agent Builder is your main tool for growing the mesh.
 
-Pick two folders on your machine:
-- `KNOWLEDGE_ROOT` - where your knowledge files live (PROJECTS.md, ROSTER.md, agent files)
-- `HANDOFFS_ROOT` - where session handoffs are saved
+**Three things it does:**
 
-**2. Copy the knowledge files**
+**Build** — Tell it what you need in plain English. It interviews you, then produces a complete, mesh-ready agent file — already wired to your knowledge layer, already following the handoff protocol, already registered in your roster.
 
-Copy everything from `knowledge/` into your `KNOWLEDGE_ROOT` folder.
+**Check + fix** — Paste any agent you've already written. It runs a mesh compliance check across five criteria and patches only what's missing. Your existing file stays intact.
 
-**3. Fill in your projects and roster**
+**Register** — Have an agent you just want tracked in the system without changing? It adds it to your roster and creates its handoff folders.
 
-Open `PROJECTS.md` and add your active projects.
-Open `ROSTER.md` and define your agents.
+You focus on what you want your agents to do. The Builder handles how they work together.
 
-**4. Create your first agent**
+To use the Agent Builder any time:
 
-Copy `agents/HUSTLE/agent.md` as a starting point. Replace the role, tone, and capabilities with your own. Keep the session start protocol - that's what connects the agent to the mesh.
-
-**5. Create handoff folders**
-
-For each agent, create:
 ```
-[HANDOFFS_ROOT]/
-└── YOUR_AGENT_NAME/
-    ├── sessions/
-    ├── memory/
-    └── ideas/
+Read [KNOWLEDGE_ROOT]/agents/AGENT-BUILDER/agent.md and help me build an agent.
 ```
-
-**6. Run your first session**
-
-Paste your agent's `agent.md` into a Claude Project as the system prompt. At the end of the session, ask Claude to write the handoff JSON and save it to `sessions/`.
-
-Next session, paste the awakening prompt. You're back in context in seconds.
 
 ---
 
 ## The Agent Architecture
 
-Project Sanity works best with a clear hierarchy. The included example agents show two patterns:
+Project Sanity works best with a clear hierarchy. A simple example:
 
-**HUSTLE**  a conversational Claude Projects agent. Lives in the chat window. Handles strategy, momentum, and decisions. Cannot touch files directly. Routes technical work elsewhere.
+```
+STRATEGIST    (conversational — Claude Projects)
+├── BUILDER   (file-aware — Claude Code)
+└── WRITER    (conversational — Claude Projects)
+```
 
-**SCOUT**  a Claude Code terminal agent. Has full filesystem access. Reads repos, writes reports, routes findings. Operates autonomously on command.
+The Strategist handles decisions and direction in chat. The Builder executes technical work in the terminal with filesystem access. The Writer handles drafts and edits in chat. All three share the same knowledge layer and handoff folders. Any one of them can check what the others were working on.
 
-You can build as many agents as your workflow needs. The mesh keeps them coordinated.
+Your roster will look different. The mesh adapts to whatever hierarchy makes sense for your work.
 
 ---
 
@@ -195,13 +199,13 @@ You can build as many agents as your workflow needs. The mesh keeps them coordin
 
 **One source of truth.** Projects and roster live in two files. Every agent reads them. Nothing gets out of sync.
 
+**You focus on what. The system handles how.** Agents are built to work together. You don't wire them manually — the Builder does it. You don't teach each new agent your whole project history — the knowledge layer does it.
+
 **Agents are partners, not tools.** The best agents have a defined personality, clear scope, and patterns they watch for. They push back. They call things out. They give verdicts, not options.
 
 **Momentum over perfection.** A shipped thing beats a perfect plan. The handoff system exists so you can stop mid-session and pick up tomorrow without losing an hour re-establishing context.
 
 **Ideas are first-class output.** Half-formed ideas that surface mid-session are worth capturing. The ideas folder makes that effortless. A harvest pass across all agent idea folders is where unexpected connections happen.
-
-**The awakening prompt is the secret.** A well-written awakening prompt means every session starts at full speed. It is not a summary, it is a launch pad.
 
 **The mesh is open.** Every agent can read every other agent's handoffs, memory, and ideas. Context flows freely. Nothing is locked away.
 
@@ -219,7 +223,7 @@ The fix: after any significant agent pass, review output against your original i
 
 ## Contributing
 
-This is a living system. If you build agents, improve the handoff format, or find better patterns - PRs are welcome.
+This is a living system. If you build agents, improve the handoff format, or find better patterns — PRs are welcome.
 
 ---
 
